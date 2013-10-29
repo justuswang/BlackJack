@@ -23,20 +23,18 @@ def cal_sum(array)
       sum += v
     end
   end
-  if sum < 21 && ace_exists == true && sum + 10 <= 21
-    sum += 10
-  end
+  sum < 21 && ace_exists == true && sum + 10 <= 21 && sum += 10
   sum
 end
 
 def get_card_names(array)
-  card_names = ''
+  card_names = []
   array.each do |card|
     card.each do |k, v|
-      card_names += ", #{k}"
+      card_names.push "#{k}"
     end
   end
-  card_names
+  card_names.join(',')
 end
 
 def init_deck
@@ -57,8 +55,8 @@ def init_deck
           { club_5: 5 }, { club_6: 6 }, { club_7: 7 }, { club_8: 8 },
           { club_9: 9 }, { club_10: 10 }, { club_j: 10 }, { club_q: 10 },
           { club_k: 10 }]
-  
-  deck = shuffle deck
+
+  shuffle deck
 end
 
 puts 'Please enter your name:'
@@ -75,7 +73,7 @@ while true
   end
 
   deck = init_deck
-  
+
   dealer_cards = []
   dealer_sum = 0
   player_cards = []
@@ -96,29 +94,25 @@ while true
       puts 'Hit or stay? (hit/stay)'
     end
 
-    selection = gets.chomp.upcase
-    if selection == 'HIT'
+    if gets.chomp.upcase == 'HIT'
       player_cards.push deck.pop
-    elsif selection == 'STAY'
-       while dealer_sum < 17
-         dealer_cards.push deck.pop
-         dealer_sum = cal_sum dealer_cards
-       end
-
-       dealer_card_names = get_card_names dealer_cards
-       puts "Dealer has #{dealer_card_names}"
-       if dealer_sum == 21
-         puts 'Dealer Win!'
-       elsif dealer_sum < 21
-         if dealer_sum <= player_sum
-           puts  'You Win!'
-         else
-           puts  'Dealer Win!'
-         end
-       else
-         puts 'You Win! Dealer busted!'
-       end
-       break
+      next
     end
+
+    while dealer_sum < 17
+      dealer_cards.push deck.pop
+      dealer_sum = cal_sum dealer_cards
+    end
+
+    dealer_card_names = get_card_names dealer_cards
+    puts "Dealer has #{dealer_card_names}"
+    if dealer_sum == 21 || (dealer_sum < 21 && dealer_sum > player_sum)
+      puts 'Dealer Win!'
+    elsif dealer_sum < 21 && dealer_sum <= player_sum
+      puts  'You Win!'
+    else
+      puts 'You Win! Dealer busted!'
+    end
+    break
   end
 end
