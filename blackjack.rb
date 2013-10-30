@@ -1,22 +1,20 @@
 def calculate_total(cards)
-  num_ace = 0
+  card_values = cards.map { |e| e[1] }
   total = 0
-  cards.each do |card|
-    card_value = card[1]
+  card_values.each do |card_value|
     if card_value == 'A'
-      v = 1
-      num_ace += 1
+      total += 1
     elsif card_value.to_i == 0
-      v = 10
+      total += 10
     else
-      v = card_value.to_i
+      total += card_value.to_i
     end
-    total += v
   end
 
-  num_ace.times do
+  card_values.select { |e| e == 'A' }.count.times do
     total += 10 if total + 10 <= 21
   end
+
   total
 end
 
@@ -45,7 +43,7 @@ while true
   if first_time
     first_time = false
   else
-    puts 'Play again? (Y/N)'
+    puts 'Play again? (Enter anything to to play again, \'N\' or \'n\' to exit.)'
     exit if gets.chomp.upcase == 'N'
   end
 
@@ -71,10 +69,10 @@ while true
       puts 'You Busted!'
       break
     else
-      puts 'Hit or stay? (hit/stay)'
+      puts 'Hit or stay? (Enter anything to stay, \'H\' or \'h\' to hit.)'
     end
 
-    if gets.chomp.upcase == 'HIT'
+    if gets.chomp.upcase == 'H'
       player_cards.push deck.pop
       next
     end
